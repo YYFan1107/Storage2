@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Your Page Title</title>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js">
+		</script>
+	</head>
+
+	<body>
+		<div id = "to-do">
+		    <h4>To Do List!</h4>
+		    <h4>Make Sure to Click Run Code Twice!</h4>
+		</div>
+		<hr>
+		<div id= "to-do-list">
+		</div>
+	</body>
+	<script>
+	    let toDoList = ["Make Coffee", "Buy Dog Food", "Cook Dinner", "Find a New Hobby"];
+        let savedToDoList = JSON.parse(localStorage.getItem("toDoList"));
+
+        if (!savedToDoList) {
+            localStorage.setItem("toDoList", JSON.stringify(toDoList));
+            savedToDoList = toDoList;
+        }
+
+        function renderList(list) {
+            $('#to-do-list').empty();
+            list.forEach(function(item) {
+                $('#to-do-list').append('<p>' + item + '</p>');
+            });
+        }
+        
+        renderList(savedToDoList);
+	</script>
+</html>

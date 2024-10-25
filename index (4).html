@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>        
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <style>
+        button {
+            border-radius: 25px;
+            background-color: lightgray;
+            color: white;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+            padding: 15px;
+            transition: background-color 1s ease-out;
+        }
+        hr {
+            width: 100%;
+        }
+        button:hover {
+            background-color: green;
+        }
+        button:focus {
+            outline: none;
+        }
+        #container, #previous-scores {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="container">
+        <h2>Your Score Tracker</h2>
+        <button id="record-score">Record a score!</button>
+        <button id="show-max-score">Show Max Score</button>
+        <p id="latest-score"></p>
+        <hr>
+    </div>
+    <div id="previous-scores"></div>
+
+    <script>
+        function getRandomScore() {
+            return Math.floor(Math.random() * 101);
+        }
+
+        function renderScores(scores) {
+            $("#previous-scores").empty();
+            scores.forEach(function(scoreObj) {
+                $("#previous-scores").append('<p>' + scoreObj.score + ' - ' + scoreObj.date + '</p>');
+            });
+        }
+
+        let previousScores = JSON.parse(localStorage.getItem("scores")) || [];
+
+        renderScores(previousScores);
+
+        $("#record-score").click(function() {
+            let newScore = getRandomScore();
+            let date = new Date().toLocaleString();
+            
+            $("#latest-score").text('Latest Score: ' + newScore + ' - ' + date);
+
+            previousScores.push({ score: newScore, date: date });
+
+            localStorage.setItem("scores", JSON.stringify(previousScores));
+
+            renderScores(previousScores);
+        });
+
+        function findMaxScore(scores) {
+            let maxScore = Math.max(...scores.map(scoreObj => scoreObj.score));
+            return maxScore;
+        }
+
+        $("#show-max-score").click(function() {
+            let showMax = prompt("Do you want to see your max score? Type 'yes' or 'no'.", "yes");
+
+            if (showMax.toLowerCase() === "yes") {
+                let maxScore = findMaxScore(previousScores);
+                alert("Your maximum score is: " + maxScore);
+            }
+        });
+    </script>
+</body>
+</html>
